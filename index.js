@@ -1,62 +1,30 @@
 const express = require('express');
-const mongoose = require ('mongoose');
-const app = express();
-const bodyParser = require("body-parser");
-require('dotenv').config({path: './variables.env'});
+const app = express ();
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+require ('dotenv').config({path:'./variables.env'});
+require('./Models/Device');
+require('./Models/Data');
 
 mongoose.connect(process.env.DATABASE);
-
-
 mongoose.connection.on('error', function(error){
+    console.log('Database error:', error);
+})
+app.use(bodyParser());
+app.use(cors());
 
+app.get('/', function(req,res){
+    res.send('It works!');
+});
 
-console.log('Error de mongoose:', error);
+const routes = require('./Routes/routes');
+
+app.use('/', routes);
+
+app.listen(process.env.PORT, function(){
+console.log('App listening on port', process.env.PORT);
 
 });
 
 
-
-
-app.use(bodyParser());
-
-app.get('/', function(req,res){
-    res.send('Hola!');
-
-
-})
-
-app.listen(process.env.PORT, function(){
-    console.log('Escuchando...');
-
-})
-app.get('/jaja', function(req,res){
-    res.send('loco');
-    
-
-})
-
-app.get("/nuevapersona", function (req,res){
-    const miPersona = new modeloPersona({
-        name:"Ionut",
-        username:"Iountsito",
-        email:"ionut@example.com",
-        password:"juegolol",
-        age: 15
-    })
-    miPersona.save().then(function(){
-        res.send('Persona guardada');
-    })
-})
-require("./Schemas/Persona");
-const modeloPersona = mongoose.model('Persona');
-
-app.get('/personas', function(req,res){
-    
-    const search = {
-        username: req.query.name
-    }
-   modeloPersona.find(search).then(function(users){
-
-       res.send(users);
-   })
-})
