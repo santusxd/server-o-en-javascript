@@ -1,5 +1,14 @@
 const mongoose = require('mongoose');
 const DeviceModel = mongoose.model('Device');
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+    service : 'gmail',
+    auth:{
+        user: process.env.MAIL_ACCOUNT,
+        pass: process.env.MAIL_PASSWORD
+    }
+});
 
 module.exports.createDevice = function (req, res) {
     const name = req.body.name;
@@ -50,8 +59,6 @@ module.exports.updateDevice = function (req, res) {
 
     const deviceId = req.body.deviceId;
     const newStatus = req.body.status;
-    console.log(deviceId);
-    console.log(newStatus);
     DeviceModel.findByIdAndUpdate(deviceId, { status: newStatus }).then(function (device) {
         if (device) {
             res.status(200).send('Device Updated')
@@ -61,6 +68,35 @@ module.exports.updateDevice = function (req, res) {
         }
 
     });
+
+};
+
+module.exports.sendEmail = function(req,res){
+    const deviceId = req.body.device;
+    const date = new Date();
+    const formattedDate = date.toISOString();
+    const mailOptions = {
+        from: process.env.MAIL_ACCOUNT,
+        to:'santiago.bar.mor@techtalents.club',
+        subject: formattedDate + '|| New alert frem device' + deviceId,
+        html: `<p> The device with Id:${deviceId} send you an alert at ${formattedDate}</p>`
+    };
+
+    transporter.sendMail(mailOptions, function(err, info){
+        if(err){
+            console.log(err);
+            res.status(400).json(err);
+
+        } else{
+            console.log(info);
+            res.status(200).json(info);
+        } 
+
+
+    })
+
+    
+
 
 }
 
