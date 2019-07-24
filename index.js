@@ -10,7 +10,10 @@ require('./Models/Data');
 mongoose.connect(process.env.DATABASE);
 mongoose.connection.on('error', function(error){
     console.log('Database error:', error);
-})
+});
+
+app.use(cors());
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
