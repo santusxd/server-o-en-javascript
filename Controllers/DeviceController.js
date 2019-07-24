@@ -52,7 +52,7 @@ module.exports.updateDevice = function (req, res) {
     const newStatus = req.body.status;
     console.log(deviceId);
     console.log(newStatus);
-    DeviceModel.findOneByIdAndUpdate(deviceId, { status: newStatus }).then(function (device) {
+    DeviceModel.findByIdAndUpdate(deviceId, { status: newStatus }).then(function (device) {
         if (device) {
             res.status(200).send('Device Updated')
 
