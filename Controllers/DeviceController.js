@@ -72,7 +72,7 @@ module.exports.sendEmail = function(req,res){
     const date = new Date();
     const formattedDate = date.toISOString();
     const msg = {
-        from: 'santiago.bar.mor@techtalents.club',
+        from: 'charley71a_v557z@vcbox.pro',
         to:'santiagodelbarriomorales@gmail.com',
         subject:`Alert from device: ${deviceId} || Date: ${formattedDate}`,
         text: `Alert from device: ${deviceId} || Date: ${formattedDate}`,
