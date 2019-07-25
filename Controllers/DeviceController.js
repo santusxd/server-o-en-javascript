@@ -68,7 +68,7 @@ module.exports.updateDevice = function (req, res) {
 };
 
 module.exports.sendEmail = function(req,res){
-    const deviceId = req.body.device;
+    const deviceId = req.body.deviceId;
     const date = new Date();
     const formattedDate = date.toISOString();
     const msg = {
